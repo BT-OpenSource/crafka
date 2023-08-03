@@ -19,7 +19,17 @@ module Kafka
       @keep_running = true
     end
 
-    def produce(topic : String, key : Bytes,  payload : Bytes)
+    def produce(topic : String, payload : Bytes)
+      err = LibKafkaC.producev(
+        @handle,
+        LibKafkaC::VTYPE::TOPIC, topic,
+        LibKafkaC::VTYPE::VALUE, payload, payload.size,
+        LibKafkaC::VTYPE::END
+      )
+      raise KafkaProducerException.new(err) if err != LibKafkaC::OK
+    end
+
+    def produce(topic : String, key : Bytes, payload : Bytes)
       err = LibKafkaC.producev(
         @handle,
         LibKafkaC::VTYPE::TOPIC, topic,
@@ -29,7 +39,8 @@ module Kafka
       )
       raise KafkaProducerException.new(err) if err != LibKafkaC::OK
     end
-    def produce(topic : String, key : Bytes,  payload : Bytes, timestamp : Int64)
+
+    def produce(topic : String, key : Bytes, payload : Bytes, timestamp : Int64)
       err = LibKafkaC.producev(
         @handle,
         LibKafkaC::VTYPE::TOPIC, topic,
@@ -46,7 +57,7 @@ module Kafka
       part = LibKafkaC::PARTITION_UNASSIGNED
       flags = LibKafkaC::MSG_FLAG_COPY
       err = LibKafkaC.produce(rkt, part, flags, msg.payload, msg.payload.size,
-                              msg.key, msg.key.size, nil)
+        msg.key, msg.key.size, nil)
       raise KafkaProducerException.new(err) if err != LibKafkaC::OK
     ensure
       LibKafkaC.topic_destroy(rkt)
@@ -58,9 +69,9 @@ module Kafka
       flags = LibKafkaC::MSG_FLAG_COPY
       batch.each do |t|
         err = LibKafkaC.produce(rkt, part, flags,
-                                t[:msg], t[:msg].size,
-                                t[:key], t[:key].size,
-                                nil)
+          t[:msg], t[:msg].size,
+          t[:key], t[:key].size,
+          nil)
         raise KafkaProducerException.new(err) if err != LibKafkaC::OK
       end
       poll
@@ -77,9 +88,8 @@ module Kafka
       LibKafkaC.flush(@handle, timeout)
     end
 
-    def finalize()
+    def finalize
       LibKafkaC.kafka_destroy(@handle)
     end
-
   end
 end
