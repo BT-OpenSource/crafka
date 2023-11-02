@@ -41,6 +41,7 @@ module Kafka
 
     def each(timeout = 250)
       loop do
+        Fiber.yield
         resp = poll(timeout)
         next if resp.nil?
         yield resp
