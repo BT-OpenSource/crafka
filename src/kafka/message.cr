@@ -24,8 +24,6 @@ module Kafka
 
     def initialize(@payload : Bytes, @key : Bytes)
       @partition = LibKafkaC::PARTITION_UNASSIGNED
-      # @timestamp = -1
-      # @offset = -1
     end
 
     def initialize(msg : LibKafkaC::Message)

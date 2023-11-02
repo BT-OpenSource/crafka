@@ -2,8 +2,6 @@ require "./lib_rdkafka.cr"
 
 module Kafka
   class Producer
-    # creates a new kafka handle using provided config.
-    # Throws exception on error
     def initialize(config : Hash(String, String))
       conf = LibKafkaC.conf_new
       config.each do |k, v|
