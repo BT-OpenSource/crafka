@@ -32,12 +32,11 @@ module Kafka
 
     def poll(timeout_ms : Int32) : Message?
       message_ptr = LibKafkaC.consumer_poll(@handle, timeout_ms)
-      if message_ptr.null?
-        return
-      end
-      m = Message.new(message_ptr.value)
+      return if message_ptr.null?
+
+      message = Message.new(message_ptr.value)
       LibKafkaC.message_destroy(message_ptr)
-      m
+      message
     end
 
     def each(timeout = 250)
