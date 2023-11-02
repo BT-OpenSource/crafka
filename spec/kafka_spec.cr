@@ -14,11 +14,13 @@ describe Kafka::Consumer do
       producer.produce(topic: "foo", payload: {"foo" => "bar"}.to_json.to_slice)
 
       message = consumer.poll(1000)
-      break if !message.nil? || iterations >= 60
+      break if !message.nil? || iterations >= 10
     end
+
     raise "message is nil" if message.nil?
 
     String.new(message.payload).should eq({"foo" => "bar"}.to_json)
-    consumer.close
+  ensure
+    consumer.try(&.close)
   end
 end
