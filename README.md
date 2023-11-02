@@ -20,4 +20,8 @@ require "kafka"
 
 ## Development
 
-TODO: Write development instructions here
+### Testing
+```
+docker-compose -f spec/docker-compose.yml up -d
+crystal spec
+```
