@@ -1,10 +1,9 @@
 require "./lib_rdkafka.cr"
 
-
 module Kafka
-
   struct Error
     getter error_code
+
     def initialize(@error_code : Int32)
     end
 
@@ -42,5 +41,4 @@ module Kafka
       @timestamp = msg.timestamp
     end
   end
-
 end

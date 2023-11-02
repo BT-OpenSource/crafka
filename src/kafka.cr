@@ -11,8 +11,10 @@ module Kafka
       String.new(LibKafkaC.err2str(@err))
     end
   end
+
   class KafkaProducerException < KafkaException
   end
+
   class KafkaConsumerException < KafkaException
   end
 end
