@@ -1,16 +1,18 @@
+require "log"
+
 module Kafka
   class Consumer < Client
     ERRLEN = 128
+
     def initialize(config : Hash(String, String))
       conf = LibKafkaC.conf_new
       config.each do |k, v|
         res = LibKafkaC.conf_set(conf, k, v, out err, 128)
       end
       rebalance_cb = ->(h : LibKafkaC::KafkaHandle, err : Int32, tpl : LibKafkaC::TopicPartitionList*, opaque : Void*) do
-        puts Kafka::Error.new(err).message
-        # tpl.value.elems.each do |tp|
-        #   puts "#{tp.topic}: #{tp.partition}"
-        # end
+        Log.info { Kafka::Error.new(err).message }
+        Log.info { "Topic: #{String.new(tpl.value.elems.value.topic)}, Partition: #{tpl.value.elems.value.partition}" }
+
         if err == LibKafkaC::RespErrAssignPartitions
           LibKafkaC.assign(h, tpl)
           return
@@ -56,7 +58,7 @@ module Kafka
       end
     end
 
-    def close()
+    def close
       @running = false
       LibKafkaC.consumer_close(@handle)
     end

@@ -10,7 +10,7 @@ module Kafka
         res = LibKafkaC.conf_set(conf, k, v, out err, 128)
       end
       cb = ->(h : LibKafkaC::KafkaHandle, x : Void*, y : Void*) {
-        puts "CB #{x}"
+        Log.info { "CB #{x}" }
       }
       LibKafkaC.conf_set_dr_msg_cb(conf, cb)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_PRODUCER, conf, out errstr, 512)
