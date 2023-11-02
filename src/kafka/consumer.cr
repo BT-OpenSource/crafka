@@ -1,4 +1,5 @@
 require "log"
+require "./consumer/*"
 
 module Kafka
   class Consumer < Client
@@ -9,17 +10,7 @@ module Kafka
       config.each do |k, v|
         res = LibKafkaC.conf_set(conf, k, v, out err, 128)
       end
-      rebalance_cb = ->(h : LibKafkaC::KafkaHandle, err : Int32, tpl : LibKafkaC::TopicPartitionList*, opaque : Void*) do
-        Log.info { Kafka::Error.new(err).message }
-        Log.info { "Topic: #{String.new(tpl.value.elems.value.topic)}, Partition: #{tpl.value.elems.value.partition}" }
-
-        if err == LibKafkaC::RespErrAssignPartitions
-          LibKafkaC.assign(h, tpl)
-          return
-        end
-        LibKafkaC.assign(h, nil)
-      end
-      LibKafkaC.set_rebalance_cb(conf, rebalance_cb)
+      LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
       raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64
       @running = true
