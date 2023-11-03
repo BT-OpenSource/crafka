@@ -10,16 +10,19 @@ module Kafka
       property property_name : String
 
       def initialize(@property_name, @code); end
+
+      def to_s
+        "#{LibKafkaC::ConfErrorMsg[code]}: #{property_name}"
+      end
     end
 
     def initialize(config : Hash(String, String))
-      error = nil
       conf = LibKafkaC.conf_new
-      config.each do |k, v|
+      errors = config.map do |k, v|
         res = LibKafkaC.conf_set(conf, k, v, nil, 128)
-        error = ConfError.new(k, res) unless res == LibKafkaC::Conf::OK.value
-      end
-      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error.code]}: #{error.property_name}" if error
+        ConfError.new(k, res) unless res == LibKafkaC::Conf::OK.value
+      end.compact
+      raise "Failed to load config - #{errors.map(&.to_s).join(". ")}" if errors.size > 0
 
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
