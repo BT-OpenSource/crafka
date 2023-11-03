@@ -6,10 +6,14 @@ module Kafka
     ERRLEN = 128
 
     def initialize(config : Hash(String, String))
+      error = nil
       conf = LibKafkaC.conf_new
       config.each do |k, v|
         res = LibKafkaC.conf_set(conf, k, v, out err, 128)
+        error = res unless res == LibKafkaC::Conf::OK.value
       end
+      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error]}" if error
+
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
       raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64

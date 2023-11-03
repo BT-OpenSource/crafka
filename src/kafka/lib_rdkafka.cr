@@ -100,6 +100,18 @@ lib LibKafkaC
     HEADERS   = 10
   end
 
+  enum Conf
+    UNKNOWN = -2
+    INVALID = -1
+    OK      =  0
+  end
+
+  ConfErrorMsg = {
+    -2 => "Unknown configuration name.",
+    -1 => "Invalid configuration value or property or value not supported in this build.",
+     0 => "Configuration okay.",
+  }
+
   struct Message
     err : Int32       # rd_kafka_resp_err_t err;   /**< Non-zero for error signaling. */
     rkt : Topic       # rd_kafka_topic_t *rkt;     /**< Topic */
