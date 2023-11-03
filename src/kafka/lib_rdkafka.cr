@@ -107,9 +107,9 @@ lib LibKafkaC
   end
 
   ConfErrorMsg = {
-    -2 => "Unknown configuration name.",
-    -1 => "Invalid configuration value or property or value not supported in this build.",
-     0 => "Configuration okay.",
+    -2 => "Unknown configuration name",
+    -1 => "Invalid configuration value or property or value not supported in this build",
+     0 => "Configuration okay",
   }
 
   struct Message

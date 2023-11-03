@@ -6,13 +6,14 @@ module Kafka
     ERRLEN = 128
 
     def initialize(config : Hash(String, String))
-      error = nil
+      error = [] of String | Int32
       conf = LibKafkaC.conf_new
       config.each do |k, v|
+        error = [k] of String | Int32
         res = LibKafkaC.conf_set(conf, k, v, out err, 128)
-        error = res unless res == LibKafkaC::Conf::OK.value
+        error << res unless res == LibKafkaC::Conf::OK.value
       end
-      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error]}" if error
+      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error.last]}: #{error.first}" if error.size > 1
 
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
