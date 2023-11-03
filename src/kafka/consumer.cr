@@ -5,26 +5,10 @@ module Kafka
   class Consumer < Client
     ERRLEN = 128
 
-    struct ConfError
-      property code : Int32
-      property property_name : String
-
-      def initialize(@property_name, @code); end
-
-      def to_s
-        "#{LibKafkaC::ConfErrorMsg[code]}: #{property_name}"
-      end
-    end
-
     def initialize(config : Hash(String, String))
-      conf = LibKafkaC.conf_new
-      errors = config.map do |k, v|
-        res = LibKafkaC.conf_set(conf, k, v, nil, 128)
-        ConfError.new(k, res) unless res == LibKafkaC::Conf::OK.value
-      end.compact
-      raise "Failed to load config - #{errors.map(&.to_s).join(". ")}" if errors.size > 0
-
+      conf = Kafka::Config.set(config)
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
+
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
       raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64
       @running = true
