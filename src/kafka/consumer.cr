@@ -5,15 +5,21 @@ module Kafka
   class Consumer < Client
     ERRLEN = 128
 
+    struct ConfError
+      property code : Int32
+      property property_name : String
+
+      def initialize(@property_name, @code); end
+    end
+
     def initialize(config : Hash(String, String))
-      error = [] of String | Int32
+      error = nil
       conf = LibKafkaC.conf_new
       config.each do |k, v|
-        error = [k] of String | Int32
-        res = LibKafkaC.conf_set(conf, k, v, out err, 128)
-        error << res unless res == LibKafkaC::Conf::OK.value
+        res = LibKafkaC.conf_set(conf, k, v, nil, 128)
+        error = ConfError.new(k, res) unless res == LibKafkaC::Conf::OK.value
       end
-      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error.last]}: #{error.first}" if error.size > 1
+      raise "Failed to load config - #{LibKafkaC::ConfErrorMsg[error.code]}: #{error.property_name}" if error
 
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
