@@ -8,10 +8,6 @@ module Kafka
     @timestamp : Int64?
     getter err, offset, key, payload, partition, timestamp
 
-    def initialize(@payload : Bytes, @key : Bytes)
-      @partition = LibRdKafka::PARTITION_UNASSIGNED
-    end
-
     def initialize(msg : LibRdKafka::Message)
       if msg.err != LibRdKafka::OK
         @err = RdKafka::Error.new(msg.err)
