@@ -1,7 +1,7 @@
 require "./spec_helper"
 
 describe "Producing & Consuming" do
-  it "can produce message to and consumer messages from Kafka" do
+  it "can produce messages to and consume messages from Kafka" do
     producer = Kafka::Producer.new({"bootstrap.servers" => "127.0.0.1:9094", "broker.address.family" => "v4"})
     consumer = Kafka::Consumer.new({"bootstrap.servers" => "127.0.0.1:9094", "group.id" => "foo_group", "broker.address.family" => "v4"})
     consumer.subscribe("foo")

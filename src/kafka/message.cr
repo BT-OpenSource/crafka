@@ -1,21 +1,6 @@
 require "./lib_rdkafka.cr"
 
 module Kafka
-  struct Error
-    getter error_code
-
-    def initialize(@error_code : Int32)
-    end
-
-    def message
-      if p = LibKafkaC.err2str(@error_code)
-        String.new(p)
-      else
-        ""
-      end
-    end
-  end
-
   struct Message
     @err : Error?
     @offset : Int64?

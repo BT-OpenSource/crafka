@@ -11,7 +11,7 @@ module Kafka
       end
     end
 
-    def self.set(properties : Hash(String, String)) : LibKafkaC::ConfHandle
+    def self.build(properties : Hash(String, String)) : LibKafkaC::ConfHandle
       config = LibKafkaC.conf_new
       errors = properties.map do |key, value|
         result = LibKafkaC.conf_set(config, key, value, nil, 128)

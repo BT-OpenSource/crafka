@@ -6,7 +6,7 @@ module Kafka
     ERRLEN = 128
 
     def initialize(config : Hash(String, String))
-      conf = Kafka::Config.set(config)
+      conf = Kafka::Config.build(config)
       LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
 
       @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
