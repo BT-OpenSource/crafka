@@ -2,7 +2,7 @@ require "log"
 require "./consumer/*"
 
 module Kafka
-  class Consumer < Client
+  class Consumer
     ERRLEN = 128
 
     def initialize(config : Hash(String, String))

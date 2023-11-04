@@ -1,5 +1,5 @@
 module Kafka
-  class Consumer < Client
+  class Consumer
     class Rebalance
       def self.callback
         ->(h : LibRdKafka::KafkaHandle, err : Int32, tpl : LibRdKafka::TopicPartitionList*, opaque : Void*) do
