@@ -9,8 +9,10 @@ module Kafka
       conf = Kafka::Config.build(config)
       LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)
 
-      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, out errstr, 512)
-      raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64
+      error_buffer = uninitialized UInt8[128]
+      errstr = error_buffer.to_unsafe
+      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, 128)
+      raise "Unable to create consumer - #{String.new(errstr)}" if @handle.null?
       @running = true
       LibRdKafka.poll_set_consumer(@handle)
     end
