@@ -4,7 +4,7 @@ lib LibC
 end
 
 @[Link("rdkafka")]
-lib LibKafkaC
+lib LibRdKafka
   # C API documented here:
   # https://github.com/edenhill/librdkafka/blob/master/src/rdkafka.h
 

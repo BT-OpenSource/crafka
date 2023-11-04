@@ -7,15 +7,15 @@ module Kafka
       def initialize(@property_name, @code); end
 
       def to_s
-        "#{LibKafkaC::ConfErrorMsg[code]}: #{property_name}"
+        "#{LibRdKafka::ConfErrorMsg[code]}: #{property_name}"
       end
     end
 
-    def self.build(properties : Hash(String, String)) : LibKafkaC::ConfHandle
-      config = LibKafkaC.conf_new
+    def self.build(properties : Hash(String, String)) : LibRdKafka::ConfHandle
+      config = LibRdKafka.conf_new
       errors = properties.map do |key, value|
-        result = LibKafkaC.conf_set(config, key, value, nil, 128)
-        Kafka::Config::Error.new(key, result) unless result == LibKafkaC::Conf::OK.value
+        result = LibRdKafka.conf_set(config, key, value, nil, 128)
+        Kafka::Config::Error.new(key, result) unless result == LibRdKafka::Conf::OK.value
       end.compact
       raise "Failed to load config - #{errors.map(&.to_s).join(". ")}" if errors.size > 0
 

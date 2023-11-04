@@ -8,7 +8,7 @@ module Kafka
     end
 
     def message
-      String.new(LibKafkaC.err2str(@err))
+      String.new(LibRdKafka.err2str(@err))
     end
   end
 

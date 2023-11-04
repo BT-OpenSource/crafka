@@ -7,33 +7,33 @@ module Kafka
 
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
-      LibKafkaC.set_rebalance_cb(conf, Rebalance.callback)
+      LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)
 
-      @handle = LibKafkaC.kafka_new(LibKafkaC::TYPE_CONSUMER, conf, out errstr, 512)
+      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, out errstr, 512)
       raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64
       @running = true
-      LibKafkaC.poll_set_consumer(@handle)
+      LibRdKafka.poll_set_consumer(@handle)
     end
 
-    def subscribe(*topics) : LibRdKafka::Error?
-      tpl = LibKafkaC.topic_partition_list_new(topics.size)
+    def subscribe(*topics) : RdKafka::Error?
+      tpl = LibRdKafka.topic_partition_list_new(topics.size)
       topics.each do |topic|
-        LibKafkaC.topic_partition_list_add(tpl, topic, -1)
+        LibRdKafka.topic_partition_list_add(tpl, topic, -1)
       end
-      err = LibKafkaC.subscribe(@handle, tpl)
+      err = LibRdKafka.subscribe(@handle, tpl)
       if err != 0
-        LibKafkaC.topic_partition_list_destroy(tpl)
-        return LibRdKafka::Error.new(err)
+        LibRdKafka.topic_partition_list_destroy(tpl)
+        return RdKafka::Error.new(err)
       end
-      LibKafkaC.topic_partition_list_destroy(tpl)
+      LibRdKafka.topic_partition_list_destroy(tpl)
     end
 
     def poll(timeout_ms : Int32) : Message?
-      message_ptr = LibKafkaC.consumer_poll(@handle, timeout_ms)
+      message_ptr = LibRdKafka.consumer_poll(@handle, timeout_ms)
       return if message_ptr.null?
 
       message = Message.new(message_ptr.value)
-      LibKafkaC.message_destroy(message_ptr)
+      LibRdKafka.message_destroy(message_ptr)
       message
     end
 
@@ -49,7 +49,7 @@ module Kafka
 
     def close
       @running = false
-      LibKafkaC.consumer_close(@handle)
+      LibRdKafka.consumer_close(@handle)
     end
   end
 end

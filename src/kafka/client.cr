@@ -1,4 +1,4 @@
-require "./lib_rdkafka.cr"
+require "./librdkafka.cr"
 
 module Kafka
   class Client

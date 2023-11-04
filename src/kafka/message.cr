@@ -1,20 +1,20 @@
-require "./lib_rdkafka.cr"
-require "./librdkafka/*"
+require "./librdkafka.cr"
+require "./rdkafka/*"
 
 module Kafka
   struct Message
-    @err : LibRdKafka::Error?
+    @err : RdKafka::Error?
     @offset : Int64?
     @timestamp : Int64?
     getter err, offset, key, payload, partition, timestamp
 
     def initialize(@payload : Bytes, @key : Bytes)
-      @partition = LibKafkaC::PARTITION_UNASSIGNED
+      @partition = LibRdKafka::PARTITION_UNASSIGNED
     end
 
-    def initialize(msg : LibKafkaC::Message)
-      if msg.err != LibKafkaC::OK
-        @err = LibRdKafka::Error.new(msg.err)
+    def initialize(msg : LibRdKafka::Message)
+      if msg.err != LibRdKafka::OK
+        @err = RdKafka::Error.new(msg.err)
       end
       @payload = Slice(UInt8).new(msg.len)
       @payload.copy_from(msg.payload, msg.len)
