@@ -1,7 +1,8 @@
 require "./kafka/*"
 
 module Kafka
-  VERSION = "0.1.0"
+  VERSION     = "0.1.0"
+  MAX_ERR_LEN = 160
 
   class KafkaException < Exception
     def initialize(@err : Int32)

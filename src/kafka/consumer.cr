@@ -3,15 +3,13 @@ require "./consumer/*"
 
 module Kafka
   class Consumer
-    ERRLEN = 128
-
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
       LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)
 
-      error_buffer = uninitialized UInt8[128]
+      error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
       errstr = error_buffer.to_unsafe
-      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, 128)
+      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, error_buffer.size)
       raise "Unable to create consumer - #{String.new(errstr)}" if @handle.null?
 
       @running = true

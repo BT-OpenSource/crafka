@@ -5,13 +5,13 @@ module Kafka
     def initialize(config : Hash(String, String))
       conf = LibRdKafka.conf_new
       config.each do |k, v|
-        res = LibRdKafka.conf_set(conf, k, v, out err, 128)
+        res = LibRdKafka.conf_set(conf, k, v, out err, Kafka::MAX_ERR_LEN)
       end
       cb = ->(h : LibRdKafka::KafkaHandle, x : Void*, y : Void*) {
         Log.info { "CB #{x}" }
       }
       LibRdKafka.conf_set_dr_msg_cb(conf, cb)
-      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_PRODUCER, conf, out errstr, 512)
+      @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_PRODUCER, conf, out errstr, Kafka::MAX_ERR_LEN)
       raise "Kafka: Unable to create new producer: #{errstr}" if @handle == 0_u64
       @polling = false
       @keep_running = true
