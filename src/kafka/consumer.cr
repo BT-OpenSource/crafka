@@ -13,6 +13,7 @@ module Kafka
       errstr = error_buffer.to_unsafe
       @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, 128)
       raise "Unable to create consumer - #{String.new(errstr)}" if @handle.null?
+
       @running = true
       LibRdKafka.poll_set_consumer(@handle)
     end
