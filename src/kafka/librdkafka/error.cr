@@ -1,4 +1,4 @@
-module Kafka
+module LibRdKafka
   struct Error
     getter code
 

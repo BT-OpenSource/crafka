@@ -1,8 +1,9 @@
 require "./lib_rdkafka.cr"
+require "./librdkafka/*"
 
 module Kafka
   struct Message
-    @err : Error?
+    @err : LibRdKafka::Error?
     @offset : Int64?
     @timestamp : Int64?
     getter err, offset, key, payload, partition, timestamp
@@ -13,7 +14,7 @@ module Kafka
 
     def initialize(msg : LibKafkaC::Message)
       if msg.err != LibKafkaC::OK
-        @err = Error.new(msg.err)
+        @err = LibRdKafka::Error.new(msg.err)
       end
       @payload = Slice(UInt8).new(msg.len)
       @payload.copy_from(msg.payload, msg.len)

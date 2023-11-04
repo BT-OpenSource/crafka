@@ -15,7 +15,7 @@ module Kafka
       LibKafkaC.poll_set_consumer(@handle)
     end
 
-    def subscribe(*topics) : Error?
+    def subscribe(*topics) : LibRdKafka::Error?
       tpl = LibKafkaC.topic_partition_list_new(topics.size)
       topics.each do |topic|
         LibKafkaC.topic_partition_list_add(tpl, topic, -1)
@@ -23,7 +23,7 @@ module Kafka
       err = LibKafkaC.subscribe(@handle, tpl)
       if err != 0
         LibKafkaC.topic_partition_list_destroy(tpl)
-        return Kafka::Error.new(err)
+        return LibRdKafka::Error.new(err)
       end
       LibKafkaC.topic_partition_list_destroy(tpl)
     end
