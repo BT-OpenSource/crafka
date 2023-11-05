@@ -10,23 +10,21 @@ module Kafka
       error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
       errstr = error_buffer.to_unsafe
       @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, error_buffer.size)
-      raise "Unable to create consumer - #{String.new(errstr)}" if @handle.null?
+      raise ConsumerException.new(String.new(errstr)) if @handle.null?
 
       @running = true
       LibRdKafka.poll_set_consumer(@handle)
     end
 
-    def subscribe(*topics) : RdKafka::Error?
+    def subscribe(*topics)
       tpl = LibRdKafka.topic_partition_list_new(topics.size)
       topics.each do |topic|
         LibRdKafka.topic_partition_list_add(tpl, topic, -1)
       end
       err = LibRdKafka.subscribe(@handle, tpl)
-      if err != 0
-        LibRdKafka.topic_partition_list_destroy(tpl)
-        raise ConsumerException.new(err)
-      end
-      LibRdKafka.topic_partition_list_destroy(tpl)
+      raise ConsumerException.new(err) if err != 0
+    ensure
+      LibRdKafka.topic_partition_list_destroy(tpl) if tpl
     end
 
     def poll(timeout_ms : Int32) : Message?

@@ -5,11 +5,15 @@ module Kafka
   MAX_ERR_LEN = 160
 
   class KafkaException < Exception
-    def initialize(@err : Int32)
-    end
+    def initialize(@err : Int32 | String); end
 
     def message
-      "librdkafka error - #{String.new(LibRdKafka.err2str(@err))}"
+      detailed_message = if @err.is_a?(Int32)
+                           String.new(LibRdKafka.err2str(@err.as(Int32)))
+                         else
+                           @err
+                         end
+      "librdkafka error - #{detailed_message}"
     end
   end
 
