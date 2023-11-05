@@ -6,7 +6,7 @@ module Kafka
         error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
         errstr = error_buffer.to_unsafe
         result = LibRdKafka.conf_set(config, key, value, errstr, error_buffer.size)
-        String.new(errstr) unless result == LibRdKafka::Conf::OK.value
+        String.new(errstr) unless result == LibRdKafka::OK
       end.compact
       raise "Failed to load config - #{errors.map(&.to_s).join(". ")}" if errors.size > 0
 

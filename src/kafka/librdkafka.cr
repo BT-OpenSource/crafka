@@ -100,12 +100,6 @@ lib LibRdKafka
     HEADERS   = 10
   end
 
-  enum Conf
-    UNKNOWN = -2
-    INVALID = -1
-    OK      =  0
-  end
-
   struct Message
     err : Int32       # rd_kafka_resp_err_t err;   /**< Non-zero for error signaling. */
     rkt : Topic       # rd_kafka_topic_t *rkt;     /**< Topic */
