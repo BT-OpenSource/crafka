@@ -3,8 +3,6 @@ require "./consumer/*"
 
 module Kafka
   class Consumer
-    getter handle
-
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
       LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)

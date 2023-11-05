@@ -17,7 +17,7 @@ module Kafka
     end
   end
 
-  class KafkaProducerException < KafkaException
+  class ProducerException < KafkaException
   end
 
   class ConsumerException < KafkaException
