@@ -10,6 +10,7 @@
 - Fix `Invalid memory access` error and raise exception when unknown or invalid config passed to `Kafka::Consumer.new`
 - Fix `Invalid memory access` error and raise exception when `LibRdKafka.kafka_new` fails to create consumer
 - Fix `Invalid memory access` error and raise exception when `Kafka::Consumer#subscribe` fails to subscribe to topics
+- Call `rd_kafka_destroy()` after closing consumer as advised in the [documentation](https://github.com/confluentinc/librdkafka/blob/master/src/rdkafka.h#L4219-L4220)
 
 ### Changed
 - Refactor setting rebalancing callback into separate class

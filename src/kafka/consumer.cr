@@ -3,6 +3,8 @@ require "./consumer/*"
 
 module Kafka
   class Consumer
+    getter handle
+
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
       LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)
@@ -49,6 +51,7 @@ module Kafka
     def close
       @running = false
       LibRdKafka.consumer_close(@handle)
+      LibRdKafka.kafka_destroy(@handle)
     end
   end
 end
