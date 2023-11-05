@@ -47,30 +47,28 @@ module Kafka
     end
 
     def produce(topic : String, msg : Message)
-      rkt = LibRdKafka.topic_new(@handle, topic, nil)
-      part = LibRdKafka::PARTITION_UNASSIGNED
+      topic_struct = LibRdKafka.topic_new(@handle, topic, nil)
+      partition = LibRdKafka::PARTITION_UNASSIGNED
       flags = LibRdKafka::MSG_FLAG_COPY
-      err = LibRdKafka.produce(rkt, part, flags, msg.payload, msg.payload.size,
+      err = LibRdKafka.produce(topic_struct, partition, flags, msg.payload, msg.payload.size,
         msg.key, msg.key.size, nil)
       raise ProducerException.new(err) if err != LibRdKafka::OK
     ensure
-      LibRdKafka.topic_destroy(rkt)
+      LibRdKafka.topic_destroy(topic_struct)
     end
 
     def produce_batch(topic : String, batch : Array({key: Array(UInt8), msg: Array(UInt8)}))
-      rkt = LibRdKafka.topic_new(@handle, topic, nil)
-      part = LibRdKafka::PARTITION_UNASSIGNED
+      topic_struct = LibRdKafka.topic_new(@handle, topic, nil)
+      partition = LibRdKafka::PARTITION_UNASSIGNED
       flags = LibRdKafka::MSG_FLAG_COPY
       batch.each do |t|
-        err = LibRdKafka.produce(rkt, part, flags,
-          t[:msg], t[:msg].size,
-          t[:key], t[:key].size,
-          nil)
+        err = LibRdKafka.produce(topic_struct, partition, flags, t[:msg], t[:msg].size,
+          t[:key], t[:key].size, nil)
         raise ProducerException.new(err) if err != LibRdKafka::OK
       end
       poll
     ensure
-      LibRdKafka.topic_destroy(rkt)
+      LibRdKafka.topic_destroy(topic_struct)
     end
 
     def poll(timeout = 500)
