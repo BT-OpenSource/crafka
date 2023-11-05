@@ -24,7 +24,7 @@ module Kafka
       err = LibRdKafka.subscribe(@handle, tpl)
       if err != 0
         LibRdKafka.topic_partition_list_destroy(tpl)
-        return RdKafka::Error.new(err)
+        raise ConsumerException.new(err)
       end
       LibRdKafka.topic_partition_list_destroy(tpl)
     end

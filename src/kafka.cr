@@ -9,13 +9,13 @@ module Kafka
     end
 
     def message
-      String.new(LibRdKafka.err2str(@err))
+      "librdkafka error - #{String.new(LibRdKafka.err2str(@err))}"
     end
   end
 
   class KafkaProducerException < KafkaException
   end
 
-  class KafkaConsumerException < KafkaException
+  class ConsumerException < KafkaException
   end
 end
