@@ -1,13 +1,11 @@
 require "./librdkafka.cr"
+require "./producer/*"
 
 module Kafka
   class Producer
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
-      cb = ->(h : LibRdKafka::KafkaHandle, x : Void*, y : Void*) {
-        Log.info { "CB #{x}" }
-      }
-      LibRdKafka.conf_set_dr_msg_cb(conf, cb)
+      LibRdKafka.conf_set_dr_msg_cb(conf, DeliveryReport.callback)
 
       error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
       errstr = error_buffer.to_unsafe

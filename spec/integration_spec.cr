@@ -12,6 +12,7 @@ describe "Producing & Consuming" do
       iterations += 1
       print "."
       producer.produce(topic: "foo", payload: {"foo" => "bar"}.to_json.to_slice)
+      producer.flush
 
       message = consumer.poll(1000)
       break if !message.nil? || iterations >= 10
@@ -22,5 +23,6 @@ describe "Producing & Consuming" do
     String.new(message.payload).should eq({"foo" => "bar"}.to_json)
   ensure
     consumer.try(&.close)
+    producer.try(&.finalize)
   end
 end

@@ -16,6 +16,7 @@
 ### Changed
 - Refactor setting rebalancing callback into separate class
 - Refactor building of config for Producer/Consumer into separate class
+- Improve logging around consumer partition assignment and producer delivery reports
 
 ## [0.2.0] - 2023-08-03
 - Forked from https://github.com/CloudKarafka/kafka.cr
