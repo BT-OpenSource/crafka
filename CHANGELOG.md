@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - Integration & unit tests
+- Documentation for all key methods and examples in the README
 
 ### Fixed
 - Format all files using `crystal tool format`

@@ -9,6 +9,7 @@ module Kafka
   class KafkaException < Exception
     def initialize(@err : Int32 | String); end
 
+    # If err is an `Int32` call `rd_kafka_err2str` C function to convert to error message, otherwise return err.
     def message
       detailed_message = if @err.is_a?(Int32)
                            String.new(LibRdKafka.err2str(@err.as(Int32)))

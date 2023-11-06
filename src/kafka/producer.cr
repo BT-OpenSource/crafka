@@ -13,6 +13,10 @@ module Kafka
       raise ProducerException.new(String.new(errstr)) if @handle.null?
     end
 
+    # Produce and send a single message to broker.
+    #
+    # Raises a `Kafka::ProducerException` when produce fails.
+    # Calls the `rd_kafka_producev` C function.
     def produce(topic : String, payload : Bytes)
       err = LibRdKafka.producev(
         @handle,
@@ -23,6 +27,7 @@ module Kafka
       raise ProducerException.new(err) if err != LibRdKafka::OK
     end
 
+    # :ditto:
     def produce(topic : String, key : Bytes, payload : Bytes)
       err = LibRdKafka.producev(
         @handle,
@@ -34,6 +39,7 @@ module Kafka
       raise ProducerException.new(err) if err != LibRdKafka::OK
     end
 
+    # :ditto:
     def produce(topic : String, key : Bytes, payload : Bytes, timestamp : Int64)
       err = LibRdKafka.producev(
         @handle,
@@ -46,6 +52,10 @@ module Kafka
       raise ProducerException.new(err) if err != LibRdKafka::OK
     end
 
+    # Produce and send a single message to broker.
+    #
+    # Raises a `Kafka::ProducerException` when produce fails.
+    # Calls the `rd_kafka_produce` C function.
     def produce(topic : String, msg : Message)
       topic_struct = LibRdKafka.topic_new(@handle, topic, nil)
       partition = LibRdKafka::PARTITION_UNASSIGNED
@@ -57,6 +67,10 @@ module Kafka
       LibRdKafka.topic_destroy(topic_struct)
     end
 
+    # Produce and send a single message to broker.
+    #
+    # Raises a `Kafka::ProducerException` when produce fails.
+    # Calls the `rd_kafka_produce` C function.
     def produce_batch(topic : String, batch : Array({key: Array(UInt8), msg: Array(UInt8)}))
       topic_struct = LibRdKafka.topic_new(@handle, topic, nil)
       partition = LibRdKafka::PARTITION_UNASSIGNED
@@ -71,14 +85,27 @@ module Kafka
       LibRdKafka.topic_destroy(topic_struct)
     end
 
+    # Polls the Kafka handle for events
+    #
+    # An application should make sure to call #poll at regular
+    # intervals to serve any queued callbacks waiting to be called.
     def poll(timeout = 500)
       LibRdKafka.poll(@handle, timeout)
     end
 
+    # Wait until all outstanding produce requests, et.al, are completed.
+    # This should typically be done prior to destroying a producer instance
+    # to make sure all queued and in-flight produce requests are completed
+    # before terminating.
+    #
+    # Calls the `rd_kafka_flush` C function.
     def flush(timeout = 1000)
       LibRdKafka.flush(@handle, timeout)
     end
 
+    # Destroy the Kafka handle.
+    #
+    # Calls the `rd_kafka_destroy` C function.
     def finalize
       LibRdKafka.kafka_destroy(@handle)
     end

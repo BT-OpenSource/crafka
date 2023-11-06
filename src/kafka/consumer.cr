@@ -16,6 +16,16 @@ module Kafka
       LibRdKafka.poll_set_consumer(@handle)
     end
 
+    # Subscribe to topics using balanced consumer groups.
+    #
+    # Supports regex - start topic with '^'. For example:
+    # ```
+    # consumer.subcribe("^foo") # will match any topics that starts with foo.
+    # ```
+    #
+    # Raises a `Kafka::ConsumerException` when the subscribe fails.
+    #
+    # Calls the `rd_kafka_subscribe` C function.
     def subscribe(*topics)
       tpl = LibRdKafka.topic_partition_list_new(topics.size)
       topics.each do |topic|
@@ -27,6 +37,9 @@ module Kafka
       LibRdKafka.topic_partition_list_destroy(tpl) if tpl
     end
 
+    # Poll the consumer for messages or events.
+    #
+    # Calls the `rd_kafka_consumer_poll` C function.
     def poll(timeout_ms : Int32) : Message?
       message_ptr = LibRdKafka.consumer_poll(@handle, timeout_ms)
       return if message_ptr.null?
@@ -36,6 +49,9 @@ module Kafka
       message
     end
 
+    # Loops indefinitely calling `#poll` at the given interval `timeout`.
+    #
+    # At the beginning of each loop, `Fiber.yield` is called allow other Fibers to run.
     def each(timeout = 250)
       loop do
         Fiber.yield
@@ -46,6 +62,9 @@ module Kafka
       end
     end
 
+    # Close the consumer and destroy the Kafka handle.
+    #
+    # Calls the `rd_kafka_consumer_close` and `rd_kafka_destroy` C functions.
     def close
       @running = false
       LibRdKafka.consumer_close(@handle)

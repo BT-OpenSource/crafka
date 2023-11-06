@@ -1,5 +1,17 @@
 module Kafka
   class Config
+    class InvalidConfigException < Exception
+      def initialize(@err : String); end
+
+      def message
+        "librdkafka error - #{@err}"
+      end
+    end
+
+    # Returns a librdkafka configuration object with the given properties set.
+    #
+    # Raises a `Kafka::Config::InvalidConfigException` when setting config fails.
+    # Calls the `rd_kafka_conf_new` and `rd_kafka_conf_set` C functions.
     def self.build(properties : Hash(String, String)) : LibRdKafka::ConfHandle
       config = LibRdKafka.conf_new
       errors = properties.map do |key, value|
@@ -8,7 +20,7 @@ module Kafka
         result = LibRdKafka.conf_set(config, key, value, errstr, error_buffer.size)
         String.new(errstr) unless result == LibRdKafka::OK
       end.compact
-      raise "Failed to load config - #{errors.map(&.to_s).join(". ")}" if errors.size > 0
+      raise InvalidConfigException.new(errors.map(&.to_s).join(". ")) if errors.size > 0
 
       config
     end

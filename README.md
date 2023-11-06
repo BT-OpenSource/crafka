@@ -1,6 +1,6 @@
 # kafka.cr
 
-Forked from: https://github.com/CloudKarafka/kafka.cr
+
 
 ## Installation
 
@@ -18,10 +18,41 @@ dependencies:
 require "kafka"
 ```
 
+### Producing
+```crystal
+producer = Kafka::Producer.new({"bootstrap.servers" => "localhost:9092", "broker.address.family" => "v4"})
+producer.produce(topic: "topic_name", payload: "my message".to_slice)
+producer.poll # Serves queued callbacks
+producer.flush # Wait for outstanding produce requests to complete
+
+All available args to `#produce`: topic, payload, key, timestamp.
+```
+
+### Consuming
+```crystal
+consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9092", "broker.address.family" => "v4", "group.id" => "consumer_group_name"})
+consumer.subscribe("topic_name")
+consumer.each do |message|
+  # message is an instance of Kafka::Message
+  puts message.payload
+end
+consumer.close
+```
+
+#### Subscribing to multiple topics
+```crystal
+consumer.subscribe("topic_name", "another_topic", "more_and_more")
+
+consumer.subscribe("^starts_with") # subscribe to multiple with a regex
+```
+
 ## Development
 
-### Testing
+### Running Tests
 ```
 docker-compose -f spec/docker-compose.yml up -d
 crystal spec
 ```
+
+## Credits
+Originally forked from: https://github.com/CloudKarafka/kafka.cr
