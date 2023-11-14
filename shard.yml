@@ -1,9 +1,6 @@
 name: kafka
-version: 0.2.0
+version: 0.3.0
 
-authors:
-  - Magnus Landerblom <mange@84codes.com>
-
-crystal: 0.34.0
+crystal: 1.10.1 
 
 license: MIT
