@@ -1,4 +1,4 @@
-name: kafka
+name: crafka
 version: 0.3.1
 
 crystal: 1.10.1
