@@ -24,9 +24,9 @@ producer = Kafka::Producer.new({"bootstrap.servers" => "localhost:9092", "broker
 producer.produce(topic: "topic_name", payload: "my message".to_slice)
 producer.poll # Serves queued callbacks
 producer.flush # Wait for outstanding produce requests to complete
-
-All available args to `#produce`: topic, payload, key, timestamp.
 ```
+All available args to `#produce`: `topic`, `payload`, `key`, `timestamp`.
+
 
 ### Consuming
 ```crystal
