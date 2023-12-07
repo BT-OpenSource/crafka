@@ -1,4 +1,4 @@
-# kafka.cr
+# crafka
 
 
 
@@ -9,13 +9,13 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   kafka:
-    git: https://gitlab.agile.nat.bt.com/APP15256/kafka.cr.git
+    git: https://gitlab.agile.nat.bt.com/APP15256/crafka.git
 ```
 
 ## Usage
 
 ```crystal
-require "kafka"
+require "crafka"
 ```
 
 ### Producing
