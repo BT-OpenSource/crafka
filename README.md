@@ -8,7 +8,7 @@ Add this to your application's `shard.yml`:
 
 ```yaml
 dependencies:
-  kafka:
+  crafka:
     git: https://gitlab.agile.nat.bt.com/APP15256/crafka.git
 ```
 
