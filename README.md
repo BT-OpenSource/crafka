@@ -29,7 +29,7 @@ All available args to `#produce`: `topic`, `payload`, `key`, `timestamp`.
 
 #### Debug Statistics
 
-To enable capturing of the statistics described [here](https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md) you can pass a `stats_path` argument to `Kafka::Producer.new` containing the location of a directory.
+To enable capturing of the statistics described [here](https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md) you can pass a `stats_path` argument to `Kafka::Producer.new` containing the location of a file to be written to.
 
 Also ensure that you set the `statistics.interval.ms` in your producer config.
 

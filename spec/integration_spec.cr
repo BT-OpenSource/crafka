@@ -36,7 +36,7 @@ describe "Statistics" do
   it "allows you to capture the statistic reports from librdkafka" do
     producer = Kafka::Producer.new(
       {"bootstrap.servers" => "127.0.0.1:9094", "broker.address.family" => "v4", "statistics.interval.ms" => "10"},
-      stats_path: __DIR__
+      stats_path: "#{__DIR__}/librdkafka_stats.json"
     )
     3.times do
       producer.produce(topic: "stats", payload: "foo".to_slice)
