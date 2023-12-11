@@ -50,7 +50,7 @@ consumer.subscribe("^starts_with") # subscribe to multiple with a regex
 
 ### Running Tests
 ```
-docker-compose -f spec/docker-compose.yml up -d
+make setup
 crystal spec
 ```
 
