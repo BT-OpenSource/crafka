@@ -27,6 +27,18 @@ producer.flush # Wait for outstanding produce requests to complete
 ```
 All available args to `#produce`: `topic`, `payload`, `key`, `timestamp`.
 
+#### Debug Statistics
+
+To enable capturing of the statistics described [here](https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md) you can pass a `stats_path` argument to `Kafka::Producer.new` containing the location of a directory.
+
+Also ensure that you set the `statistics.interval.ms` in your producer config.
+
+```crystal
+producer = Kafka::Producer.new(
+  {"bootstrap.servers" => "localhost:9092", "broker.address.family" => "v4", "statistics.interval.ms" => "5000"},
+  stats_path: "/some/directory/librdkafka_stats.json"
+)
+```
 
 ### Consuming
 ```crystal
