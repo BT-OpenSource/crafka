@@ -127,6 +127,7 @@ lib LibRdKafka
   fun conf_set = rd_kafka_conf_set(conf : ConfHandle, name : UInt8*, value : UInt8*, errstr : UInt8*, errstr_size : LibC::SizeT) : Int32
 
   fun conf_set_dr_msg_cb = rd_kafka_conf_set_dr_msg_cb(conf : ConfHandle, cb : (KafkaHandle, Message, Void*) ->)
+  fun conf_set_stats_cb = rd_kafka_conf_set_stats_cb(conf : ConfHandle, cb : (KafkaHandle, UInt8*, LibC::SizeT, Void*) ->)
 
   fun metadata = rd_kafka_metadata(h : KafkaHandle,
                                    all_topics : Int32,
