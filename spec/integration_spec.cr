@@ -30,7 +30,7 @@ end
 
 describe "Statistics" do
   after_each do
-    FileUtils.rm("#{__DIR__}/librdkafka_stats.json")
+    FileUtils.rm("#{__DIR__}/librdkafka_stats.json") if File.exists?("#{__DIR__}/librdkafka_stats.json")
   end
 
   it "allows you to capture the statistic reports from librdkafka" do
@@ -38,6 +38,7 @@ describe "Statistics" do
       {"bootstrap.servers" => "127.0.0.1:9094", "broker.address.family" => "v4", "statistics.interval.ms" => "10"},
       stats_path: "#{__DIR__}/librdkafka_stats.json"
     )
+
     3.times do
       producer.produce(topic: "stats", payload: "foo".to_slice)
       producer.poll
@@ -45,6 +46,7 @@ describe "Statistics" do
     end
 
     File.exists?("#{__DIR__}/librdkafka_stats.json").should be_true
+    File.read("#{__DIR__}/librdkafka_stats.json").should contain "{ \"name\": \"rdkafka#producer-1\""
   ensure
     producer.try(&.finalize)
   end
