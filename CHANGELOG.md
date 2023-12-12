@@ -1,14 +1,20 @@
 # Changelog
 
-## [0.3.2]
+## [Unreleased]
+
+## v0.3.3 - 2023-12-12
+### Added
+- Rename main src file
+
+## v0.3.2 - 2023-12-12
 ### Added
 - Save statistics option on `Kafka::Producer`
 
-## [0.3.1]
+## v0.3.1 - 2023-11-14
 ### Fixed
 - Remove topic + partition name from rebalance log
 
-## [0.3.0]
+## v0.3.0 - 2023-11-14
 ### Added
 - Integration & unit tests
 - Documentation for all key methods and examples in the README
@@ -27,7 +33,7 @@
 - Refactor building of config for Producer/Consumer into separate class
 - Improve logging around consumer partition assignment and producer delivery reports
 
-## [0.2.0] - 2023-08-03
+## v0.2.0 - 2023-08-03
 - Forked from https://github.com/CloudKarafka/kafka.cr
 
 ### Added
