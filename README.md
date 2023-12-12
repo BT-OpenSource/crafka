@@ -9,7 +9,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   crafka:
-    git: https://gitlab.agile.nat.bt.com/APP15256/crafka.git
+    github: bt-opensource/crafka
 ```
 
 ## Usage
