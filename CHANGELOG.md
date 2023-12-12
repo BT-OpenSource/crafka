@@ -1,6 +1,14 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.2]
+### Added
+- Save statistics option on `Kafka::Producer`
+
+## [0.3.1]
+### Fixed
+- Remove topic + partition name from rebalance log
+
+## [0.3.0]
 ### Added
 - Integration & unit tests
 - Documentation for all key methods and examples in the README

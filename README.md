@@ -66,5 +66,10 @@ make setup
 crystal spec
 ```
 
+### Releasing
+1. Update shard.yml and `src/kafka.cr` with new version number
+2. Update CHANGELOG.md with changes
+3. Commit and tag commit
+
 ## Credits
 Originally forked from: https://github.com/CloudKarafka/kafka.cr
