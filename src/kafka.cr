@@ -1,10 +1,10 @@
 require "./kafka/*"
 
 module Kafka
-  VERSION     = "0.1.0"
+  VERSION     = "0.3.2"
   MAX_ERR_LEN = 160
 
-  Log = ::Log.for("kafka.cr")
+  Log = ::Log.for("crafka")
 
   class KafkaException < Exception
     def initialize(@err : Int32 | String); end
