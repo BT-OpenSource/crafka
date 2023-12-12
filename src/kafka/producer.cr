@@ -3,9 +3,10 @@ require "./producer/*"
 
 module Kafka
   class Producer
-    def initialize(config : Hash(String, String))
+    def initialize(config : Hash(String, String), stats_path = "")
       conf = Kafka::Config.build(config)
       LibRdKafka.conf_set_dr_msg_cb(conf, DeliveryReport.callback)
+      LibRdKafka.conf_set_stats_cb(conf, Statistics.callback(stats_path)) unless stats_path.empty?
 
       error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
       errstr = error_buffer.to_unsafe
