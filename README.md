@@ -1,6 +1,6 @@
 # crafka
 
-
+Detailed documentation: https://crystaldoc.info/github/BT-OpenSource/crafka/main/index.html
 
 ## Installation
 
