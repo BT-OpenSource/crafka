@@ -68,7 +68,7 @@ module Kafka
       LibRdKafka.topic_destroy(topic_struct)
     end
 
-    # Produce and send a single message to broker.
+    # Produce and send multiple messages to broker.
     #
     # Raises a `Kafka::ProducerException` when produce fails.
     # Calls the `rd_kafka_produce` C function.
