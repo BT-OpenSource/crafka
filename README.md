@@ -67,7 +67,7 @@ crystal spec
 ```
 
 ### Releasing
-1. Update shard.yml and `src/kafka.cr` with new version number
+1. Update shard.yml and `src/crafka.cr` with new version number
 2. Update CHANGELOG.md with changes
 3. Commit and tag commit
 
