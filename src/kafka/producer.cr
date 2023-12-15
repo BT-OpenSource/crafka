@@ -3,10 +3,16 @@ require "./producer/*"
 
 module Kafka
   class Producer
-    def initialize(config : Hash(String, String), stats_path = "")
+    DEFAULT_POLL_INTERVAL_SECONDS = 5
+
+    def initialize(config : Hash(String, String), stats_path = "", poll_interval = DEFAULT_POLL_INTERVAL_SECONDS)
       conf = Kafka::Config.build(config)
       LibRdKafka.conf_set_dr_msg_cb(conf, DeliveryReport.callback)
       LibRdKafka.conf_set_stats_cb(conf, Statistics.callback(stats_path)) unless stats_path.empty?
+
+      @auto_poll = poll_interval != 0
+      @poll_interval = poll_interval
+      @last_poll_time = Time.utc.to_unix
 
       error_buffer = uninitialized UInt8[Kafka::MAX_ERR_LEN]
       errstr = error_buffer.to_unsafe
@@ -26,6 +32,8 @@ module Kafka
         LibRdKafka::VTYPE::END
       )
       raise ProducerException.new(err) if err != LibRdKafka::OK
+
+      auto_poll
     end
 
     # :ditto:
@@ -38,6 +46,8 @@ module Kafka
         LibRdKafka::VTYPE::END
       )
       raise ProducerException.new(err) if err != LibRdKafka::OK
+
+      auto_poll
     end
 
     # :ditto:
@@ -51,6 +61,8 @@ module Kafka
         LibRdKafka::VTYPE::END
       )
       raise ProducerException.new(err) if err != LibRdKafka::OK
+
+      auto_poll
     end
 
     # Produce and send a single message to broker.
@@ -64,6 +76,8 @@ module Kafka
       err = LibRdKafka.produce(topic_struct, partition, flags, msg.payload, msg.payload.size,
         msg.key, msg.key.size, nil)
       raise ProducerException.new(err) if err != LibRdKafka::OK
+
+      auto_poll
     ensure
       LibRdKafka.topic_destroy(topic_struct)
     end
@@ -81,7 +95,7 @@ module Kafka
           t[:key], t[:key].size, nil)
         raise ProducerException.new(err) if err != LibRdKafka::OK
       end
-      poll
+      auto_poll
     ensure
       LibRdKafka.topic_destroy(topic_struct)
     end
@@ -109,6 +123,13 @@ module Kafka
     # Calls the `rd_kafka_destroy` C function.
     def finalize
       LibRdKafka.kafka_destroy(@handle)
+    end
+
+    private def auto_poll
+      return unless @auto_poll && (Time.utc.to_unix - @last_poll_time) > @poll_interval
+
+      poll
+      @last_poll_time = Time.utc.to_unix
     end
   end
 end
