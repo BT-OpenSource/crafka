@@ -27,6 +27,22 @@ producer.flush # Wait for outstanding produce requests to complete
 ```
 All available args to `#produce`: `topic`, `payload`, `key`, `timestamp`.
 
+#### Auto Polling
+librdkafka recommends that [`rd_kafka_poll`](https://github.com/confluentinc/librdkafka/blob/master/src/rdkafka.h#L3200-L3228) is called at regular intervals to serve queued callbacks. This functionality is built in to Crafka.
+
+By default after each `#produce`, a `Kafka::Producer` will call poll if it hasn't polled in the last 5 seconds.
+
+You can configure this with the `poll_interval` argument:
+
+```crystal
+producer = Kafka::Producer.new(
+  {"bootstrap.servers" => "localhost:9092", "broker.address.family" => "v4"},
+  poll_interval: 30
+)
+```
+
+To disable auto polling, set `poll_interval` to 0.
+
 #### Debug Statistics
 
 To enable capturing of the statistics described [here](https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md) you can pass a `stats_path` argument to `Kafka::Producer.new` containing the location of a file to be written to.
@@ -39,6 +55,8 @@ producer = Kafka::Producer.new(
   stats_path: "/some/directory/librdkafka_stats.json"
 )
 ```
+
+---
 
 ### Consuming
 ```crystal
