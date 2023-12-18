@@ -1,7 +1,7 @@
 module Kafka
   class Producer
     class Statistics
-      # Returns a callback to be used every statistics.interval.ms (configured separately)
+      # Returns a callback to be triggered every statistics.interval.ms (configured separately)
       #
       # The callback writes the statistics to the given file path.
       def self.callback(file_path : String)
