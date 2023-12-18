@@ -39,4 +39,18 @@ describe "Auto polling" do
     File.exists?(stats_file).should be_false
     producer.flush
   end
+
+  it "doesn't call #poll when poll_interval is set to 0" do
+    producer = Kafka::Producer.new(
+      {"bootstrap.servers" => "127.0.0.1:9094", "broker.address.family" => "v4", "statistics.interval.ms" => "10"},
+      stats_path: stats_file,
+      poll_interval: 0
+    )
+
+    sleep(1)
+    producer.produce(topic: "autopolling", payload: "foo".to_slice)
+
+    File.exists?(stats_file).should be_false
+    producer.flush
+  end
 end

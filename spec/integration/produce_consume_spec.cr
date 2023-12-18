@@ -23,6 +23,6 @@ describe "Producing & Consuming" do
     String.new(message.payload).should eq({"foo" => "bar"}.to_json)
   ensure
     consumer.try(&.close)
-    producer.try(&.finalize)
+    producer.try(&.flush)
   end
 end
