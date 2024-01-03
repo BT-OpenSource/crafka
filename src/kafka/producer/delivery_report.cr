@@ -6,7 +6,7 @@ module Kafka
       # This logs the message payload that was delivered.
       def self.callback
         ->(handle : LibRdKafka::KafkaHandle, message : LibRdKafka::Message, opaque : Void*) {
-          Log.info { "Message Delivered - #{String.new(message.payload)}" }
+          Log.info { "Message Delivered - #{message.payload.null? ? "(empty message payload)" : String.new(message.payload)}" }
         }
       end
     end
