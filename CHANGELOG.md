@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## v0.4.1 - 2024-01-04
+### Added
+- Fix to prevent exception when Delivery Report string is null pointer
+
 ## v0.4.0 - 2023-12-18
 ### Added
 - Call `rd_kafka_poll` automatically in `Kafka::Producer`
