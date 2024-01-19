@@ -22,6 +22,8 @@ require "crafka"
 ```crystal
 producer = Kafka::Producer.new({"bootstrap.servers" => "localhost:9092", "broker.address.family" => "v4"})
 producer.produce(topic: "topic_name", payload: "my message".to_slice)
+
+# Optionally
 producer.poll # Serves queued callbacks
 producer.flush # Wait for outstanding produce requests to complete
 ```
