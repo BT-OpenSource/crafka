@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## v0.4.2 - 2024-01-22
+### Changed
+- Upgrade Crystal version to v1.11.2
+
 ## v0.4.1 - 2024-01-04
 ### Added
 - Fix to prevent exception when Delivery Report string is null pointer
