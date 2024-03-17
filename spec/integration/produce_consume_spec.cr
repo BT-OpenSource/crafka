@@ -21,6 +21,7 @@ describe "Producing & Consuming" do
     raise "message is nil" if message.nil?
 
     String.new(message.payload).should eq({"foo" => "bar"}.to_json)
+    String.new(message.topic).should eq("foo")
   ensure
     consumer.try(&.close)
     producer.try(&.flush)
