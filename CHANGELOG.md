@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## v0.5.0 - 2024-03-18
+### Added
+- Add `#topic` method to `Kafka::Message`. Thanks @oozzal!
+
 ## v0.4.2 - 2024-01-22
 ### Changed
 - Upgrade Crystal version to v1.11.2
