@@ -66,7 +66,7 @@ consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9092", "broker
 consumer.subscribe("topic_name")
 consumer.each do |message|
   # message is an instance of Kafka::Message
-  puts "#{String.new(message.topic)} -> #{String.new(message.payload)}
+  puts "#{String.new(message.topic)} -> #{String.new(message.payload)}"
 end
 consumer.close
 ```
