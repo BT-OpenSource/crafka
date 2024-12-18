@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## v0.6.0 - 2024-12-18
 ### Added
 - Add `Kafka.version_info` and `Kafka.librdkafka_version` methods.
 
