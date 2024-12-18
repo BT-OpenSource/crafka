@@ -1,5 +1,9 @@
 # crafka
 
+[![Build Status](https://github.com/BT-OpenSource/crafka/actions/workflows/ci.yml/badge.svg)](https://github.com/BT-OpenSource/crafka/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/BT-OpenSource/crafka)](https://github.com/BT-OpenSource/crafka/releases)
+[![License](https://img.shields.io/github/license/BT-OpenSource/crafka)](https://github.com/BT-OpenSource/crafka/blob/main/LICENSE)
+
 Detailed documentation: https://crystaldoc.info/github/BT-OpenSource/crafka/main/index.html
 
 ## Installation
