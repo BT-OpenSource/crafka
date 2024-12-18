@@ -40,22 +40,26 @@ module Kafka
     # Poll the consumer for messages or events.
     #
     # Calls the `rd_kafka_consumer_poll` C function.
-    def poll(timeout_ms : Int32) : Message?
+    def poll(timeout_ms : Int32, raise_on_error : Bool = true) : Message?
       message_ptr = LibRdKafka.consumer_poll(@handle, timeout_ms)
       return if message_ptr.null?
 
       message = Message.new(message_ptr.value)
       LibRdKafka.message_destroy(message_ptr)
+      if raise_on_error && (err = message.err)
+        raise ConsumerException.new(err.message)
+      end
+
       message
     end
 
     # Loops indefinitely calling `#poll` at the given interval `timeout`.
     #
     # At the beginning of each loop, `Fiber.yield` is called allow other Fibers to run.
-    def each(timeout = 250)
+    def each(timeout = 250, raise_on_error = true, &)
       loop do
         Fiber.yield
-        resp = poll(timeout)
+        resp = poll(timeout, raise_on_error)
         next if resp.nil?
         yield resp
         break unless @running

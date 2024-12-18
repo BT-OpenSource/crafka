@@ -12,10 +12,10 @@ describe "Producing & Consuming" do
       iterations += 1
       print "."
       producer.produce(topic: "foo", payload: {"foo" => "bar"}.to_json.to_slice)
-      producer.flush
+      producer.flush(timeout: 10_000)
 
-      message = consumer.poll(1000)
-      break if !message.nil? || iterations >= 10
+      message = consumer.poll(timeout_ms: 10_000, raise_on_error: false)
+      break if (!message.nil? && message.err.nil?) || iterations >= 10
     end
 
     raise "message is nil" if message.nil?

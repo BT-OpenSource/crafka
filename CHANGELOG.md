@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Update `Kafka::Consumer#poll` and `Kafka::Consumer#each` to automatically raise a `Kafka::ConsumerException` if the
+  message is an error. Pass `raise_on_error: false` to maintain the previous behaviour.
 
 ## v0.5.0 - 2024-03-18
 ### Added
