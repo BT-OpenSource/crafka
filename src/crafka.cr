@@ -6,6 +6,14 @@ module Kafka
 
   Log = ::Log.for("crafka")
 
+  def self.version_info
+    "crafka v#{VERSION}, librdkafka v#{librdkafka_version}"
+  end
+
+  def self.librdkafka_version
+    String.new(LibRdKafka.version_str)
+  end
+
   class KafkaException < Exception
     def initialize(@err : Int32 | String); end
 

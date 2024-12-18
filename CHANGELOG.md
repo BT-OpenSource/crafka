@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Add `Kafka.version_info` and `Kafka.librdkafka_version` methods.
+
 ### Changed
 - Update `Kafka::Consumer#poll` and `Kafka::Consumer#each` to automatically raise a `Kafka::ConsumerException` if the
   message is an error. Pass `raise_on_error: false` to maintain the previous behaviour.
