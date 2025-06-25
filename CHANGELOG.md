@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Changed
+- Raise an error when trying to use a consumer after it has been closed
 - Add `Consumer#stop` method to stop an `each` loop
 - Add crystal versions 1.15.1 and 1.16.3 to test matrix
 
