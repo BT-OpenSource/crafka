@@ -26,4 +26,21 @@ describe Kafka::Consumer do
       end
     end
   end
+
+  describe "#each" do
+    it "returns when stopped" do
+      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+
+      spawn do
+        until consumer.running?
+          sleep(30.milliseconds)
+        end
+        consumer.stop
+      end
+
+      timeout(5.seconds) do
+        consumer.each(timeout: 10) { }
+      end
+    end
+  end
 end

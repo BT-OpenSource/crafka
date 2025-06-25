@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Changed
+- Add `Consumer#stop` method to stop an `each` loop
 - Add crystal versions 1.15.1 and 1.16.3 to test matrix
 
 ### Fixed

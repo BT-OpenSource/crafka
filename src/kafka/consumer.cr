@@ -3,6 +3,11 @@ require "./consumer/*"
 
 module Kafka
   class Consumer
+    getter? running : Bool = false
+
+    @handle : LibRdKafka::KafkaHandle
+    @stop_requested = false
+
     def initialize(config : Hash(String, String))
       conf = Kafka::Config.build(config)
       LibRdKafka.set_rebalance_cb(conf, Rebalance.callback)
@@ -12,7 +17,6 @@ module Kafka
       @handle = LibRdKafka.kafka_new(LibRdKafka::TYPE_CONSUMER, conf, errstr, error_buffer.size)
       raise ConsumerException.new(String.new(errstr)) if @handle.null?
 
-      @running = true
       LibRdKafka.poll_set_consumer(@handle)
     end
 
@@ -57,12 +61,25 @@ module Kafka
     #
     # At the beginning of each loop, `Fiber.yield` is called allow other Fibers to run.
     def each(timeout = 250, raise_on_error = true, &)
-      loop do
+      @running = true
+      @stop_requested = false
+      until @stop_requested
         Fiber.yield
         resp = poll(timeout, raise_on_error)
         next if resp.nil?
         yield resp
-        break unless @running
+      end
+    ensure
+      @running = false
+    end
+
+    # Stops the each loop at the next poll interval.
+    def stop(wait = false)
+      @stop_requested = true
+      return unless wait
+
+      while @running
+        sleep(10.milliseconds)
       end
     end
 
@@ -70,9 +87,9 @@ module Kafka
     #
     # Calls the `rd_kafka_consumer_close` and `rd_kafka_destroy` C functions.
     def close
-      @running = false
       LibRdKafka.consumer_close(@handle)
       LibRdKafka.kafka_destroy(@handle)
+      @handle = LibRdKafka::KafkaHandle.null
     end
   end
 end
