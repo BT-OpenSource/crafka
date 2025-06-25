@@ -4,6 +4,9 @@
 ### Changed
 - Add crystal versions 1.15.1 and 1.16.3 to test matrix
 
+### Fixed
+- Use ::sleep(Time::Span) instead of ::sleep(Number) to fix deprecations warnings with Crystal >= 1.14
+
 ## v0.6.0 - 2024-12-18
 ### Added
 - Add `Kafka.version_info` and `Kafka.librdkafka_version` methods.

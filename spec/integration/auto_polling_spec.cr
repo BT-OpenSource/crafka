@@ -15,7 +15,7 @@ describe "Auto polling" do
       poll_interval: 1
     )
 
-    sleep(2)
+    sleep(2.seconds)
     producer.produce(topic: "autopolling", payload: "foo".to_slice)
 
     # rd_kafka_poll triggers all callbacks including stats capture, so we use this as confirmation poll has been called
@@ -30,7 +30,7 @@ describe "Auto polling" do
       poll_interval: 1
     )
 
-    sleep(2)
+    sleep(2.seconds)
     producer.produce(topic: "autopolling", payload: "foo".to_slice)
 
     FileUtils.rm(stats_file)
@@ -47,7 +47,7 @@ describe "Auto polling" do
       poll_interval: 0
     )
 
-    sleep(1)
+    sleep(1.second)
     producer.produce(topic: "autopolling", payload: "foo".to_slice)
 
     File.exists?(stats_file).should be_false
