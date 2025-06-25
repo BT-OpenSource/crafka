@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Add crystal versions 1.15.1 and 1.16.3 to test matrix
 
 ## v0.6.0 - 2024-12-18
 ### Added

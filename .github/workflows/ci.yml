@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        crystal: [1.11.2, 1.12.2, 1.13.3, 1.14.0]
+        crystal: [1.11.2, 1.12.2, 1.13.3, 1.14.1, 1.15.1, 1.16.3]
     runs-on: ubuntu-latest
 
     services:
