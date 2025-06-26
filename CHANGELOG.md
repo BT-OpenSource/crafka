@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## v0.7.0 - 2025-06-26
 ### Changed
 - Raise an error when trying to use a consumer after it has been closed
 - Add `Consumer#stop` method to stop an `each` loop
