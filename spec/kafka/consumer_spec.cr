@@ -11,23 +11,21 @@ describe Kafka::Consumer do
 
   describe "#subscribe" do
     it "raises an exception when given no topics" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
-
+      consumer = create_consumer
       expect_raises(Kafka::ConsumerException, "librdkafka error - Local: Invalid argument or configuration") do
         consumer.subscribe("")
       end
     end
 
     it "raises an exception when given duplicate topics" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
-
+      consumer = create_consumer
       expect_raises(Kafka::ConsumerException, "librdkafka error - Local: Invalid argument or configuration") do
         consumer.subscribe("foo", "foo")
       end
     end
 
     it "raises an exception when called after the consumer is closed" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       consumer.close
       expect_raises(Kafka::ConsumerException, "librdkafka error - Consumer closed") do
         consumer.subscribe("foo")
@@ -37,7 +35,7 @@ describe Kafka::Consumer do
 
   describe "#poll" do
     it "raises an exception when called after the consumer is closed" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       consumer.close
       expect_raises(Kafka::ConsumerException, "librdkafka error - Consumer closed") do
         consumer.poll(250)
@@ -47,7 +45,7 @@ describe Kafka::Consumer do
 
   describe "#each" do
     it "returns when stopped" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
 
       spawn do
         until consumer.running?
@@ -62,7 +60,7 @@ describe Kafka::Consumer do
     end
 
     it "raises an exception when called after the consumer is closed" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       consumer.close
       expect_raises(Kafka::ConsumerException, "librdkafka error - Consumer closed") do
         consumer.each { }
@@ -72,12 +70,12 @@ describe Kafka::Consumer do
 
   describe "#open?" do
     it "returns true after creation" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       consumer.open?.should be_true
     end
 
     it "returns false after closing" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       consumer.close
       consumer.open?.should be_false
     end
@@ -85,7 +83,7 @@ describe Kafka::Consumer do
 
   describe "#close" do
     it "does not raise an exception when called multiple times" do
-      consumer = Kafka::Consumer.new({"bootstrap.servers" => "localhost:9094", "group.id" => "foo", "broker.address.family" => "v4"})
+      consumer = create_consumer
       2.times { consumer.close }
     end
   end
