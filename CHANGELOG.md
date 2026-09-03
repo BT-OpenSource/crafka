@@ -9,6 +9,7 @@
 ### Changed
 - Switch CI and dev docker-compose from `bitnami/kafka` to `apache/kafka`
 - Bump `actions/checkout` to v7
+- Add crystal versions 1.17.1, 1.18.2, 1.19.2, 1.20.3, and 1.21.0 to test matrix
 
 ## v0.7.0 - 2025-06-26
 ### Changed
