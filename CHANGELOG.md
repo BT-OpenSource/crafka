@@ -5,6 +5,7 @@
 ### Fixed
 - Fix delivery report callback to accept message by pointer instead of by value, fixing garbled fields on Linux x86-64. Thanks @stellarthemes!
 - Build payload strings using message length and log error string on delivery failure. Thanks @stellarthemes!
+- Prevent double-free in `Producer#finalize` by nulling the handle after `rd_kafka_destroy`, fixing a crash on exit with Crystal >= 1.21.0
 
 ### Changed
 - Switch CI and dev docker-compose from `bitnami/kafka` to `apache/kafka`

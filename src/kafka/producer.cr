@@ -122,7 +122,10 @@ module Kafka
     #
     # Calls the `rd_kafka_destroy` C function.
     def finalize
+      return if @handle.null?
+
       LibRdKafka.kafka_destroy(@handle)
+      @handle = LibRdKafka::KafkaHandle.null
     end
 
     private def auto_poll
