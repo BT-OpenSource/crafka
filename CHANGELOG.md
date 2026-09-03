@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## v0.8.0 - 2026-09-03
 ### Fixed
 - Fix delivery report callback to accept message by pointer instead of by value, fixing garbled fields on Linux x86-64. Thanks @stellarthemes!
 - Build payload strings using message length and log error string on delivery failure. Thanks @stellarthemes!
