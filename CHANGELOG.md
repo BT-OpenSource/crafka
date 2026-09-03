@@ -6,6 +6,9 @@
 - Fix delivery report callback to accept message by pointer instead of by value, fixing garbled fields on Linux x86-64. Thanks @stellarthemes!
 - Build payload strings using message length and log error string on delivery failure. Thanks @stellarthemes!
 
+### Changed
+- Switch CI and dev docker-compose from `bitnami/kafka` to `apache/kafka`
+
 ## v0.7.0 - 2025-06-26
 ### Changed
 - Raise an error when trying to use a consumer after it has been closed
