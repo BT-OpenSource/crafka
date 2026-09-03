@@ -48,7 +48,7 @@ jobs:
         run: sudo -n apt-get install -qy librdkafka-dev
 
       - name: Download source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check formatting
         run: crystal tool format --check
